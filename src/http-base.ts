@@ -1,7 +1,9 @@
 import axios, { type AxiosInstance } from 'axios'
 
+const devBaseUrl = process.env.VUE_APP_DEV_BASE_URL
+
 const apiClient: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/filmapi',
+  baseURL: devBaseUrl,
   headers: {
     'Content-Type': 'application/json'
   }
