@@ -1,34 +1,41 @@
-import http from '@/http-base'
+import createApiClient from '@/http-base'
 import { type FilmData } from '@/types/filmDataInterface'
 
 class FilmDataService {
-  getAll() {
-    return http.get('/filmapi')
+  private http: any
+
+  constructor(contentType: string) {
+    this.http = createApiClient(contentType)
+  }
+
+  getAll(type: string) {
+    return this.http.get(`/filmapi?type=${type}`)
   }
 
   get(id: string) {
-    return http.get(`/filmapi/${id}`)
+    return this.http.get(`/filmapi/${id}`)
   }
 
   create(film: FilmData) {
-    return http.post('/filmapi', film)
+    return this.http.post('/filmapi', film)
   }
 
   update(id: string, film: FilmData) {
-    return http.put(`/filmapi/${id}`, film)
+    return this.http.put(`/filmapi/${id}`, film)
   }
 
-  delete(id: string) {
-    return http.delete(`/filmapi/${id}`)
+  delete(id: number) {
+    // console.log('film', film)
+    return this.http.delete(`/filmapi?id=${id}`)
   }
 
   deleteAll() {
-    return http.delete('/filmapi')
+    return this.http.delete('/filmapi')
   }
 
   findByTitle(title: string) {
-    return http.get(`/filmapi?title=${title}`)
+    return this.http.get(`/filmapi?title=${title}`)
   }
 }
 
-export default new FilmDataService()
+export default FilmDataService

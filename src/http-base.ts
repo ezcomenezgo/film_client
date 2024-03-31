@@ -1,12 +1,14 @@
 import axios, { type AxiosInstance } from 'axios'
 
-const devBaseUrl = process.env.VUE_APP_DEV_BASE_URL
+const devBaseUrl = import.meta.env.VITE_DEV_BASE_URL
 
-const apiClient: AxiosInstance = axios.create({
-  baseURL: devBaseUrl,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
+function createApiClient(contentType: string): AxiosInstance {
+  return axios.create({
+    baseURL: devBaseUrl,
+    headers: {
+      'Content-Type': `application/${contentType}`
+    }
+  })
+}
 
-export default apiClient
+export default createApiClient
