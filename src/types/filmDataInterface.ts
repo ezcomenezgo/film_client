@@ -1,5 +1,5 @@
 export interface FilmData {
-  id: number
+  id?: number
   title: string
   year: number
   director: string

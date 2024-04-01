@@ -3,11 +3,9 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="navbar bg-base-100">
-    <button class="btn btn-secondary">Secondary</button>
-    <a class="btn btn-ghost text-xl">daisyUI</a>
+  <div class="navbar bg-base-100 space-x-5">
     <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
+    <RouterLink to="/add">Add A New Film</RouterLink>
   </div>
 
   <RouterView />
