@@ -11,6 +11,8 @@
           <option value="xml">Xml</option>
         </select>
       </div>
+
+      <span>Page: {{ currentPage }}</span>
     </div>
 
     <table class="table table-pin-rows">
@@ -25,7 +27,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="film in films" :key="film.id">
+        <tr v-for="film in getFilmsForCurrentPage()" :key="film.id">
           <td>{{ film.title }}</td>
           <td>{{ film.year }}</td>
           <td>{{ film.director }}</td>
@@ -38,11 +40,29 @@
         </tr>
       </tbody>
     </table>
+    <div class="join grid grid-cols-4">
+      <button @click="currentPage = 1" class="join-item btn btn-outline">First page</button>
+      <button
+        @click="goToPreviousPage"
+        :disabled="currentPage === 1"
+        class="join-item btn btn-outline"
+      >
+        Previous page
+      </button>
+      <button
+        @click="goToNextPage"
+        :disabled="currentPage === totalPages"
+        class="join-item btn btn-outline"
+      >
+        Next
+      </button>
+      <button @click="currentPage = totalPages" class="join-item btn btn-outline">Last page</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { type FilmData } from '@/types/filmDataInterface'
 import FilmDataService from '@/services/filmDataService'
 import { parse } from 'fsp-xml-parser'
@@ -52,13 +72,16 @@ const films = ref([] as FilmData[])
 const jsonFilmDataService = new FilmDataService('json')
 const xmlFilmDataService = new FilmDataService('xml')
 
+const pageSize = 10
+const currentPage = ref(1)
+const totalPages = computed(() => Math.ceil(films.value.length / pageSize))
+
 onMounted(() => {
   console.log('mounted')
   getAllFilms(contentType.value)
 })
 
 watch(contentType, (newType, oldType) => {
-  console.log(oldType, ' contentType changed to ', newType)
   getAllFilms(newType)
 })
 
@@ -87,9 +110,11 @@ async function deleteFilm(filmId: number) {
   try {
     result = await jsonFilmDataService.delete(filmId)
     console.log(result)
-    getAllFilms(contentType.value)
+    await getAllFilms(contentType.value)
   } catch (error) {
     console.error(error)
+  } finally {
+    currentPage.value = totalPages.value
   }
 }
 
@@ -103,8 +128,18 @@ function changeDataFormat(data: any) {
 
   return newData as FilmData
 }
-</script>
 
-<style scoped>
-/* Add your component styles here */
-</style>
+function goToPreviousPage() {
+  if (currentPage.value > 1) currentPage.value--
+}
+
+function goToNextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+
+function getFilmsForCurrentPage() {
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return films.value.slice(start, end)
+}
+</script>
