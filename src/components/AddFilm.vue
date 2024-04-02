@@ -80,8 +80,8 @@ async function addFilm() {
     !film.value.stars ||
     !film.value.review
   ) {
-    console.log('Please fill in all fields')
     unValidate.value = true
+    console.log('Please fill in all fields')
     return
   }
 

@@ -1,12 +1,19 @@
 <template>
   <div>
-    <h1>Films List</h1>
-    <select v-model="contentType" class="select select-bordered w-full max-w-xs">
-      <option disabled selected>Type</option>
-      <option value="json">Json</option>
-      <option value="xml">Xml</option>
-    </select>
-    <table>
+    <div class="flex space-x-10 items-center">
+      <h1>Films List</h1>
+
+      <div>
+        <label for="dataFormat" class="mr-3">Data Format:</label>
+        <select id="dataFormat" v-model="contentType" class="select select-bordered max-w-xs">
+          <option disabled selected>Type</option>
+          <option value="json">Json</option>
+          <option value="xml">Xml</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="table table-pin-rows">
       <thead>
         <tr>
           <th>Title</th>
@@ -25,8 +32,8 @@
           <td>{{ film.stars }}</td>
           <td>{{ film.review }}</td>
           <td class="flex space-x-2">
-            <button class="btn btn-primary">Edit</button>
-            <button class="btn btn-error" @click="deleteFilm(film.id)">Delete</button>
+            <router-link :to="'/edit/' + film.id" class="btn btn-primary">Edit</router-link>
+            <button class="btn btn-error" @click="deleteFilm(film.id!)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -55,8 +62,8 @@ watch(contentType, (newType, oldType) => {
   getAllFilms(newType)
 })
 
+// fetch all films from the API
 async function getAllFilms(type: string) {
-  // Fetch all films from the API
   try {
     let data
     if (type === 'json') {
@@ -74,8 +81,8 @@ async function getAllFilms(type: string) {
   }
 }
 
+// delete a film from the API
 async function deleteFilm(filmId: number) {
-  // Delete a film from the API
   let result
   try {
     result = await jsonFilmDataService.delete(filmId)
@@ -86,6 +93,7 @@ async function deleteFilm(filmId: number) {
   }
 }
 
+// change the data format to fit the FilmData interface
 function changeDataFormat(data: any) {
   const newData: any = {}
 
