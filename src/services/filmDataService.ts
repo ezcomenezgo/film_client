@@ -13,15 +13,15 @@ class FilmDataService {
   }
 
   get(id: string) {
-    return this.http.get(`/filmapi/${id}`)
+    return this.http.get(`/filmapi?id=${id}`)
   }
 
   create(film: FilmData) {
     return this.http.post('/filmapi', film)
   }
 
-  update(id: string, film: FilmData) {
-    return this.http.put(`/filmapi/${id}`, film)
+  update(film: FilmData) {
+    return this.http.put('/filmapi', film)
   }
 
   delete(id: number) {
