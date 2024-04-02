@@ -25,7 +25,6 @@ class FilmDataService {
   }
 
   delete(id: number) {
-    // console.log('film', film)
     return this.http.delete(`/filmapi?id=${id}`)
   }
 

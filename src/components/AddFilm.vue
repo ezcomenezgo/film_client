@@ -57,9 +57,12 @@
 
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { type FilmData } from '@/types/filmDataInterface'
 import FilmDataService from '@/services/filmDataService'
 
+const router = useRouter()
+let unValidate = ref(false)
 const film: Ref<FilmData> = ref({
   title: '',
   director: '',
@@ -67,8 +70,6 @@ const film: Ref<FilmData> = ref({
   stars: '',
   review: ''
 })
-
-let unValidate = ref(false)
 
 // handle form submission
 async function addFilm() {
@@ -81,7 +82,6 @@ async function addFilm() {
     !film.value.review
   ) {
     unValidate.value = true
-    console.log('Please fill in all fields')
     return
   }
 
@@ -89,6 +89,8 @@ async function addFilm() {
     // save the film data
     const filmDataService = new FilmDataService('json')
     await filmDataService.create(film.value)
+    // redirect to HomeView
+    router.push('/')
   } catch (error) {
     unValidate.value = true
     console.error('Error adding film:', error)

@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="film in getFilmsForCurrentPage()" :key="film.id">
+        <tr v-for="film in getFilmsForCurrentPage()" :key="film.id" class="hover">
           <td>{{ film.title }}</td>
           <td>{{ film.year }}</td>
           <td>{{ film.director }}</td>
@@ -77,11 +77,10 @@ const currentPage = ref(1)
 const totalPages = computed(() => Math.ceil(films.value.length / pageSize))
 
 onMounted(() => {
-  console.log('mounted')
   getAllFilms(contentType.value)
 })
 
-watch(contentType, (newType, oldType) => {
+watch(contentType, (newType) => {
   getAllFilms(newType)
 })
 
@@ -109,8 +108,9 @@ async function deleteFilm(filmId: number) {
   let result
   try {
     result = await jsonFilmDataService.delete(filmId)
-    console.log(result)
-    await getAllFilms(contentType.value)
+    if (result.status === 200) {
+      await getAllFilms(contentType.value)
+    }
   } catch (error) {
     console.error(error)
   } finally {
@@ -129,6 +129,7 @@ function changeDataFormat(data: any) {
   return newData as FilmData
 }
 
+// pagination functions
 function goToPreviousPage() {
   if (currentPage.value > 1) currentPage.value--
 }

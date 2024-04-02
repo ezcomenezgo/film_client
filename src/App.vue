@@ -1,9 +1,6 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-</script>
-
 <template>
   <div class="navbar bg-base-100 space-x-5">
+    <DocumentationIcon />
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/add">Add A New Film</RouterLink>
   </div>
@@ -11,4 +8,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import DocumentationIcon from '@/components/icons/IconDocumentation.vue'
+</script>

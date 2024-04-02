@@ -84,7 +84,6 @@ async function getFilm(id: string) {
   // get the film data
   try {
     const filmData = await jsonFilmDataService.get(id)
-    console.log('filmData', filmData)
     film.value = filmData.data
   } catch (error) {
     unValidate.value = true
