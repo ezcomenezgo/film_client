@@ -62,18 +62,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed, type Ref } from 'vue'
 import { type FilmData } from '@/types/filmDataInterface'
 import FilmDataService from '@/services/filmDataService'
 import { parse } from 'fsp-xml-parser'
 
-const contentType = ref('json')
+const contentType: Ref<string> = ref('json')
 const films = ref([] as FilmData[])
 const jsonFilmDataService = new FilmDataService('json')
 const xmlFilmDataService = new FilmDataService('xml')
 
 const pageSize = 10
-const currentPage = ref(1)
+const currentPage: Ref<number> = ref(1)
 const totalPages = computed(() => Math.ceil(films.value.length / pageSize))
 
 onMounted(() => {

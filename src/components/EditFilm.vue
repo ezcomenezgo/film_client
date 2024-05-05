@@ -63,7 +63,7 @@ import FilmDataService from '@/services/filmDataService'
 
 const router = useRouter()
 const jsonFilmDataService = new FilmDataService('json')
-let unValidate = ref(false)
+let unValidate: Ref<boolean> = ref(false)
 const film: Ref<FilmData> = ref({
   title: '',
   director: '',
@@ -96,13 +96,7 @@ async function getFilm(id: string) {
 // handle form submission
 async function updateFilm() {
   // validation
-  if (
-    !film.value.title ||
-    !film.value.director ||
-    !film.value.year ||
-    !film.value.stars ||
-    !film.value.review
-  ) {
+  if (!validate()) {
     console.log('Please fill in all fields')
     unValidate.value = true
     return
@@ -119,5 +113,19 @@ async function updateFilm() {
   } finally {
     unValidate.value = false
   }
+}
+
+function validate() {
+  if (
+    !film.value.title ||
+    !film.value.director ||
+    !film.value.year ||
+    !film.value.stars ||
+    !film.value.review
+  ) {
+    return false
+  }
+
+  return true
 }
 </script>
